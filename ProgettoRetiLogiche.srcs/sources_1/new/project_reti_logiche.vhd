@@ -1,11 +1,11 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: POLIMI
+-- Engineer:    Andrea Alfieri
 -- 
 -- Create Date: 03/15/2019 08:16:55 PM
 -- Design Name: 
 -- Module Name: project_reti_logiche - Behavioral
--- Project Name: 
+-- Project Name: Progetto di Reti Logiche
 -- Target Devices: 
 -- Tool Versions: 
 -- Description: 
@@ -48,59 +48,33 @@ end project_reti_logiche;
 
 architecture Behavioral of project_reti_logiche is
 
-type STATUS is (RST, RM, RX, COMP, E);
+type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Counter, AskCx, ReadCx, AskCy, ReadCy, UpdateOut, FINE);
 signal PS, NS : STATUS;
-signal Y : std_logic_vector(7 downto 0);
+signal address_counter, address_counter_next: std_logic_vector(15 to 0);
+
 
 begin
 
-delta: process(PS, i_data)
+deltaLambda: process(PS, i_data) --deve determinare stato prossimo e uscita
 begin
 
     case PS is
-        when RST =>
+        when RST => --inizializzo tutti i valori dei signal
+            address_counter <= "0000000000000000";
+            address_counter_next <= "0000000000000000";
         when others =>
     end case;
     
 end process;
 
 
-lambda: process(PS, i_data)
+state: process(i_clk, i_rst)   -- setta i valori next
 begin
-
-    case PS is
-        when RST =>
-        when others =>
-    end case;
-
-end process;
-
-
-state: process(i_clk)
-begin
-
-    if(i_clk'event and i_clk = '1') then
-        if(i_rst = '1') then
-            PS <= RST;
-        else
-            PS <= NS;
-        end if;
+    if(i_rst = '1') then
+    elsif(i_clk'event and i_clk = '1') then
     end if;
 
 end process;
-
-
-output: process(i_clk)
-begin
-    if(i_clk'event and i_clk = '1') then
-        if(i_rst = '1') then
-            Y <= "00000000";
-        else
-            Y <= Y;
-        end if;
-    end if;
-end process;
-
 
 
 
