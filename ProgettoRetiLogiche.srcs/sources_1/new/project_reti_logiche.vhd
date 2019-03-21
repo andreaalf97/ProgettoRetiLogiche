@@ -51,6 +51,7 @@ architecture Behavioral of project_reti_logiche is
 type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Counter, AskCx, ReadCx, AskCy, ReadCy, UpdateOut, FINE);
 signal PS, NS : STATUS;
 signal address_counter, address_counter_next: std_logic_vector(15 to 0);
+signal mask, mask_next: std_logic_vector(7 downto 0);
 
 
 begin
@@ -60,8 +61,31 @@ begin
 
     case PS is
         when RST => --inizializzo tutti i valori dei signal
-            address_counter <= "0000000000000000";
-            address_counter_next <= "0000000000000000";
+            address_counter <=          "0000000000000000";
+            address_counter_next <=     "0000000000000000";
+            mask <=                     "00000000";
+            mask_next <=                mask;
+            
+        when AskMask => --richiedo la maschera all'indirizzo 0 alla memoria
+            o_en <=                     '1';
+            o_we <=                     '0';
+            o_address <=                "0000000000000000";
+            
+        when ReadMask => -- leggo la maschera all'indirizzo 0 alla memoria
+            mask <=                     i_data;
+            mask_next <=                mask;
+            
+        when AskPx =>
+        when ReadPx =>
+        when AskPy =>
+        when ReadPy =>
+        when Counter =>
+        when AskCx =>
+        when ReadCx =>
+        when AskCy =>
+        when ReadCy =>
+        when UpdateOut =>
+        when FINE =>
         when others =>
     end case;
     
