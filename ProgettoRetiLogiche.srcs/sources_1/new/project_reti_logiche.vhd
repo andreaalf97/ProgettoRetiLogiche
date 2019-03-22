@@ -49,10 +49,13 @@ end project_reti_logiche;
 architecture Behavioral of project_reti_logiche is
 
 type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Counter, AskCx, ReadCx, AskCy, ReadCy, UpdateOut, FINE);
-signal PS, NS : STATUS;
-signal address_counter, address_counter_next: std_logic_vector(15 to 0);
-signal mask, mask_next: std_logic_vector(7 downto 0);
-signal pivotX, pivotX_next, pivotY, pivotY_next: std_logic_vector(7 downto 0);
+signal PS, NS :                                     STATUS;
+signal address_counter, address_counter_next:       std_logic_vector(15 to 0);
+signal mask, mask_next:                             std_logic_vector(7 downto 0);
+signal pivotX, pivotX_next, pivotY, pivotY_next:    std_logic_vector(7 downto 0);
+signal tempX, tempY, tempX_next, tempY_next:        std_logic_vector(7 downto 0);
+
+signal distMin, distMin_next:                       std_logic_vector(8 downto 0);
 
 
 begin
@@ -80,6 +83,14 @@ begin
             pivotY <=                   "00000000";
             pivotY_next <=              "00000000";
             
+            tempX <=                    "00000000";
+            tempX_next <=               "00000000";
+            tempY <=                    "00000000";
+            tempY_next <=               "00000000";
+            
+            distMin <=                  "111111111";
+            distMin_next <=             "111111111";
+            
         when AskMask => --richiedo la maschera all'indirizzo 0 alla memoria
             o_address <=                address_counter;
             o_done <=                   '0';
@@ -98,6 +109,14 @@ begin
             pivotX_next <=              "00000000";
             pivotY <=                   "00000000";
             pivotY_next <=              "00000000";
+            
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            
+            distMin <=                  distMin_next;
+            distMin_next <=             distMin;
             
         when ReadMask => -- leggo la maschera all'indirizzo 0 alla memoria
             o_address <=                address_counter;
@@ -118,6 +137,14 @@ begin
             pivotY <=                   "00000000";
             pivotY_next <=              "00000000";
             
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            
+            distMin <=                  distMin_next;
+            distMin_next <=             distMin;
+            
         when AskPx =>   -- chiedo alla memoria il valore del pivot
             address_counter <=          address_counter_next;
             mask <=                     mask_next;
@@ -136,6 +163,14 @@ begin
             pivotY_next <=              "00000000";
             
             NS <=                       ReadPx;
+            
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            
+            distMin <=                  distMin_next;
+            distMin_next <=             distMin;
             
         when ReadPx =>
             address_counter <=          address_counter_next;
@@ -157,9 +192,99 @@ begin
             
             NS <=                       AskPy;
             
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            
+            distMin <=                  distMin_next;
+            distMin_next <=             distMin;
+            
         when AskPy =>
+            address_counter <=          address_counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
+            
+            pivotX_next <=              pivotX;
+            pivotY_next <=              pivotY;
+            
+            o_address <=                address_counter;
+            o_done <=                   '0';
+            o_en <=                     '1';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+            mask_next <=                mask;       --punto fisso
+            address_counter_next <=     "0000000000000001";
+            
+            NS <=                       ReadPy;
+            
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            
+            distMin <=                  distMin_next;
+            distMin_next <=             distMin;
+        
         when ReadPy =>
+            address_counter <=          address_counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
+            
+            pivotX_next <=              pivotX;
+            pivotY_next <=              i_data;
+            
+            o_address <=                "0000000000000000";
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+            mask_next <=                mask;       --punto fisso
+            address_counter_next <=     address_counter;
+            
+            NS <=                       Counter;
+            
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            
+            distMin <=                  distMin_next;
+            distMin_next <=             distMin;
+            
         when Counter =>
+        --adesso ho tutti i segnali che mi servono e sono:
+        --      address_counter = "0000.0000.0000.0001" == indirizzo X primo centroide
+        --      mask =            Maschera di abilitazione centroidi
+        --      pivotX, pivotY =  X e Y del pivot
+        --      tempX, tempY =    X e Y dei centroidi che vado a confrontare
+        --      distMin =         distanza minima in ogni momento
+        
+            address_counter <=          address_counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            distMin <=                  distMin_next;
+            
+            --Esecuzione ################################################
+            
+            --###########################################################
+            
+            -- address_counter_next <=          address_counter;
+            mask_next <=                     mask;
+            pivotX_next <=                   pivotX;
+            pivotY_next <=                   pivotY;
+            tempX_next <=                    tempX;
+            tempY_next <=                    tempY;
+            distMin_next <=                  distMin;
+            -- NS <=                         ???
+        
         when AskCx =>
         when ReadCx =>
         when AskCy =>
