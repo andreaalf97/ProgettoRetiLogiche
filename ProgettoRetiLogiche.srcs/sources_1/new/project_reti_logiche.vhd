@@ -52,31 +52,111 @@ type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Counter, A
 signal PS, NS : STATUS;
 signal address_counter, address_counter_next: std_logic_vector(15 to 0);
 signal mask, mask_next: std_logic_vector(7 downto 0);
+signal pivotX, pivotX_next, pivotY, pivotY_next: std_logic_vector(7 downto 0);
 
 
 begin
 
-deltaLambda: process(PS, i_data) --deve determinare stato prossimo e uscita
+deltaLambda: process(PS) --deve determinare stato prossimo e uscita
 begin
 
     case PS is
         when RST => --inizializzo tutti i valori dei signal
+            o_address <=                "0000000000000000";
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
             address_counter <=          "0000000000000000";
             address_counter_next <=     "0000000000000000";
             mask <=                     "00000000";
-            mask_next <=                mask;
+            mask_next <=                "00000000";
+            
+            NS <=                       AskMask;
+            
+            pivotX <=                   "00000000";
+            pivotX_next <=              "00000000";
+            pivotY <=                   "00000000";
+            pivotY_next <=              "00000000";
             
         when AskMask => --richiedo la maschera all'indirizzo 0 alla memoria
+            o_address <=                address_counter;
+            o_done <=                   '0';
             o_en <=                     '1';
             o_we <=                     '0';
-            o_address <=                "0000000000000000";
+            o_data <=                   "00000000";
+            
+            address_counter <=          address_counter_next;
+            mask <=                     mask_next;
+            
+            mask_next <=                "00000000";
+            address_counter_next <=     "0000000000000000";
+            NS <=                       ReadMask;
+            
+            pivotX <=                   "00000000";
+            pivotX_next <=              "00000000";
+            pivotY <=                   "00000000";
+            pivotY_next <=              "00000000";
             
         when ReadMask => -- leggo la maschera all'indirizzo 0 alla memoria
-            mask <=                     i_data;
-            mask_next <=                mask;
+            o_address <=                address_counter;
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
             
-        when AskPx =>
+            address_counter <=          address_counter_next;
+            mask <=                     i_data;
+            
+            mask_next <=                mask;
+            address_counter_next <=     "0000000000010001";
+            NS <=                       AskPx;
+            
+            pivotX <=                   "00000000";
+            pivotX_next <=              "00000000";
+            pivotY <=                   "00000000";
+            pivotY_next <=              "00000000";
+            
+        when AskPx =>   -- chiedo alla memoria il valore del pivot
+            address_counter <=          address_counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
+            
+            o_address <=                address_counter;
+            o_done <=                   '0';
+            o_en <=                     '1';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+            mask_next <=                mask;
+            address_counter_next <=     "0000000000010001";
+            pivotX_next <=              "00000000";
+            pivotY_next <=              "00000000";
+            
+            NS <=                       ReadPx;
+            
         when ReadPx =>
+            address_counter <=          address_counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
+            
+            pivotX_next <=              i_data;
+            
+            o_address <=                address_counter;
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+            mask_next <=                mask;       --punto fisso
+            address_counter_next <=     "0000000000010010";
+            pivotY_next <=              "00000000";
+            
+            NS <=                       AskPy;
+            
         when AskPy =>
         when ReadPy =>
         when Counter =>
