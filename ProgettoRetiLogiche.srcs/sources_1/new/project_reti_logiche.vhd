@@ -59,6 +59,7 @@ signal tempX, tempY, tempX_next, tempY_next:        std_logic_vector(7 downto 0)
 signal distTempX, distTempY, distTempTot:           std_logic_vector(8 downto 0);
 
 signal distMin, distMin_next:                       std_logic_vector(8 downto 0);
+signal checkedAll, checkedAll_next:                  std_logic;
 
 
 begin
@@ -67,6 +68,9 @@ deltaLambda: process(PS, i_data, i_start, i_rst) --deve determinare stato prossi
 begin
 
     case PS is
+    
+-- #############################################################################################################################################
+
         when RST => --inizializzo tutti i valori dei signal            
             counter <=                  "000";
             mask <=                     "00000000";
@@ -78,6 +82,7 @@ begin
             distTempX <=                "111111111";
             distTempY <=                "111111111";
             distTempTot <=              "111111111";
+            checkedAll <=               '0';
             
             counter_next <=             "000";
             mask_next <=                "00000000";
@@ -86,6 +91,7 @@ begin
             tempX_next <=               "00000000";
             tempY_next <=               "00000000";
             distMin_next <=             "111111111";
+            checkedAll_next <=          '0';
             
             if(i_start = '1') then
                 NS <=                   AskMask;
@@ -98,6 +104,8 @@ begin
             o_en <=                     '0';
             o_we <=                     '0';
             o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
             
         when AskMask => --richiedo la maschera all'indirizzo 0 alla memoria            
             counter <=                  counter_next;
@@ -127,6 +135,8 @@ begin
             o_we <=                     '0';
             o_data <=                   "00000000";
             
+-- #############################################################################################################################################
+            
         when ReadMask => -- leggo la maschera all'indirizzo 0 alla memoria            
             counter <=                  counter_next;
             mask <=                     i_data;
@@ -155,8 +165,10 @@ begin
             o_we <=                     '0';
             o_data <=                   "00000000";
             
+-- #############################################################################################################################################
+            
         when AskPx =>   -- chiedo alla memoria il valore del pivot
-            counter <=                  "001";
+            counter <=                  "000";
             mask <=                     mask_next;
             pivotX <=                   pivotX_next;
             pivotY <=                   pivotY_next;
@@ -167,7 +179,7 @@ begin
             distTempY <=                "111111111";
             distTempTot <=              "111111111";
             
-            counter_next <=             "001";
+            counter_next <=             "000";
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;
             pivotY_next <=              pivotY;
@@ -182,6 +194,8 @@ begin
             o_en <=                     '1';
             o_we <=                     '0';
             o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
             
         when ReadPx =>
             counter <=                  counter_next;
@@ -211,6 +225,8 @@ begin
             o_we <=                     '0';
             o_data <=                   "00000000";
             
+-- #############################################################################################################################################
+            
         when AskPy =>
             counter <=                  counter_next;
             mask <=                     mask_next;
@@ -223,7 +239,7 @@ begin
             distTempY <=                "111111111";
             distTempTot <=              "111111111";
             
-            counter_next <=              counter;
+            counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
             pivotY_next <=              pivotY;
@@ -238,6 +254,8 @@ begin
             o_en <=                     '1';
             o_we <=                     '0';
             o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
         
         when ReadPy =>
             counter <=                  counter_next;
@@ -250,6 +268,7 @@ begin
             distTempX <=                "111111111";
             distTempY <=                "111111111";
             distTempTot <=              "111111111";
+            checkedAll <=               '0';
             
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
@@ -258,6 +277,7 @@ begin
             tempX_next <=               tempX;
             tempY_next <=               tempY;
             distMin_next <=             distMin;
+            checkedAll_next <=          '0';
             
             NS <=                       Processor;
             
@@ -266,6 +286,8 @@ begin
             o_en <=                     '0';
             o_we <=                     '0';
             o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
             
         when Processor =>
         --adesso ho tutti i segnali che mi servono e sono:
@@ -285,6 +307,52 @@ begin
             distTempX <=                "111111111";
             distTempY <=                "111111111";
             distTempTot <=              "111111111";
+            checkedAll <=               checkedAll_next;
+            
+            -- counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
+            
+            if(checkedAll = '1') then    --cioè se o controllato tutti gli stati
+                NS <=                   FINE;
+                counter_next <=         counter;
+            else
+                if(mask(to_integer(unsigned(counter))) = '0') then  --se il valore corrispondente della maschera è 0 rimango in questo stato e aggiorno il contatore
+                    counter_next <=     counter + "001";
+                    NS <=               Processor;
+                else            -- se la maschera è a 1 passo allo stato di richiesta X
+                    counter_next <=     counter;
+                    NS <=               AskCx;
+                end if;
+            end if;
+            
+            --NS <=                       FINE;
+            
+            --o_address <=                address_counter;
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
+        
+        when AskCx =>
+            counter <=                  counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotX_next;
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            distMin <=                  distMin_next;
+            distTempX <=                "111111111";
+            distTempY <=                "111111111";
+            distTempTot <=              "111111111";
+            checkedAll <=               checkedAll_next;
             
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
@@ -293,20 +361,170 @@ begin
             tempX_next <=               tempX;
             tempY_next <=               tempY;
             distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
             
-            NS <=                       FINE;
+            NS <=                       ReadCx;
             
-            --o_address <=                address_counter;
+            o_address <=                ("0000000000000" & (counter + "001")) + ("0000000000000" & counter);
+            o_done <=                   '0';
+            o_en <=                     '1';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
+            
+        when ReadCx =>
+            counter <=                  counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotX_next;
+            tempX <=                    i_data;
+            tempY <=                    tempY_next;
+            distMin <=                  distMin_next;
+            distTempX <=                "111111111";
+            distTempY <=                "111111111";
+            distTempTot <=              "111111111";
+            checkedAll <=               checkedAll_next;
+            
+            counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               i_data;
+            tempY_next <=               tempY;
+            distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
+            
+            NS <=                       AskCy;
+            
+            --o_address <=                ???;
             o_done <=                   '0';
             o_en <=                     '0';
             o_we <=                     '0';
             o_data <=                   "00000000";
-        
-        --when AskCx =>
-        --when ReadCx =>
-        --when AskCy =>
-        --when ReadCy =>
-        --when UpdateOut =>
+            
+-- #############################################################################################################################################
+            
+        when AskCy =>
+            counter <=                  counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotX_next;
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            distMin <=                  distMin_next;
+            distTempX <=                "111111111";
+            distTempY <=                "111111111";
+            distTempTot <=              "111111111";
+            checkedAll <=               checkedAll_next;
+            
+            counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
+            
+            NS <=                       ReadCy;
+            
+            o_address <=                (("0000000000000" & (counter + "001")) + ("0000000000000" & (counter + "001")));
+            o_done <=                   '0';
+            o_en <=                     '1';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
+            
+        when ReadCy =>
+            counter <=                  counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotX_next;
+            tempX <=                    tempX_next;
+            tempY <=                    i_data;
+            distMin <=                  distMin_next;
+            distTempX <=                "111111111";
+            distTempY <=                "111111111";
+            distTempTot <=              "111111111";
+            checkedAll <=               checkedAll_next;
+            
+            counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               tempX;
+            tempY_next <=               i_data;
+            distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
+            
+            NS <=                       UpdateOut;
+            
+            --o_address <=                (("0000000000000" & (counter + "001")) + ("0000000000000" & (counter + "001")));
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
+            
+        when UpdateOut =>
+            counter <=                  counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotX_next;
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            distMin <=                  distMin_next;
+            checkedAll <=               checkedAll_next;
+
+            --Calcolo distTempX
+            if(pivotX < tempX) then
+                distTempX <=            tempX - pivotX;
+            else
+                distTempX <=            pivotX - tempX;
+            end if;
+            
+            --Calcolo distTempY
+            if(pivotY < tempY) then
+                distTempY <=            tempY - pivotY;
+            else
+                distTempY <=            pivotY - tempY;
+            end if;
+            
+            --Calcolo distTempTot
+            distTempTot <=              distTempX + distTempY;
+            
+            if(distTempTot = distMin) then
+            elsif(distTempTot < distMin) then
+            else
+            end if;
+            
+            
+            if(counter = "111") then
+                checkedAll_next <=      '1';
+            else
+                checkedAll_next <=      checkedAll;
+            end if;
+            
+            counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               tempX;
+            tempY_next <=               tempX;
+            distMin_next <=             distMin;
+            
+            NS <=                       Processor;
+            
+            --o_address <=                (("0000000000000" & (counter + "001")) + ("0000000000000" & (counter + "001")));
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+            o_data <=                   "00000000";
+                    
+-- #############################################################################################################################################
         
         when FINE =>
             counter <=                  counter_next;
@@ -332,9 +550,14 @@ begin
             o_en <=                     '0';
             o_we <=                     '0';
             o_data <=                   "00000000";
+            
+-- #############################################################################################################################################
         
         when others =>
             NS <=                       RST;
+            
+-- #############################################################################################################################################
+
     end case;
     
 end process;
