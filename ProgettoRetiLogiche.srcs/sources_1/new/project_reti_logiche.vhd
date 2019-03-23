@@ -346,7 +346,7 @@ begin
             counter <=                  counter_next;
             mask <=                     mask_next;
             pivotX <=                   pivotX_next;
-            pivotY <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
@@ -378,7 +378,7 @@ begin
             counter <=                  counter_next;
             mask <=                     mask_next;
             pivotX <=                   pivotX_next;
-            pivotY <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
             tempX <=                    i_data;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
@@ -410,7 +410,7 @@ begin
             counter <=                  counter_next;
             mask <=                     mask_next;
             pivotX <=                   pivotX_next;
-            pivotY <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
@@ -442,7 +442,7 @@ begin
             counter <=                  counter_next;
             mask <=                     mask_next;
             pivotX <=                   pivotX_next;
-            pivotY <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
             tempX <=                    tempX_next;
             tempY <=                    i_data;
             distMin <=                  distMin_next;
@@ -474,7 +474,7 @@ begin
             counter <=                  counter_next;
             mask <=                     mask_next;
             pivotX <=                   pivotX_next;
-            pivotY <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
@@ -495,7 +495,7 @@ begin
             end if;
             
             --Calcolo distTempTot
-            distTempTot <=              distTempX + distTempY;
+            distTempTot <=              ('0' & distTempX) + ('0' & distTempY);
             
             --Aggiorno maschera e distanza minima in base alla distanza appena calcolata
             if(distTempTot = distMin) then
