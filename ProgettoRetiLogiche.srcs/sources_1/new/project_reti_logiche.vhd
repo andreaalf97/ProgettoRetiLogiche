@@ -56,7 +56,8 @@ signal mask, mask_next:                             std_logic_vector(7 downto 0)
 signal pivotX, pivotX_next, pivotY, pivotY_next:    std_logic_vector(7 downto 0);
 
 signal tempX, tempY, tempX_next, tempY_next:        std_logic_vector(7 downto 0);
-signal distTempX, distTempY, distTempTot:           std_logic_vector(8 downto 0);
+signal distTempX, distTempY:                        std_logic_vector(7 downto 0);
+signal distTempTot:                                 std_logic_vector(8 downto 0);
 
 signal distMin, distMin_next:                       std_logic_vector(8 downto 0);
 signal checkedAll, checkedAll_next:                  std_logic;
@@ -79,8 +80,8 @@ begin
             tempX <=                    "00000000";
             tempY <=                    "00000000";
             distMin <=                  "111111111";
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               '0';
             
@@ -115,8 +116,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             
             counter_next <=             counter;
@@ -145,8 +146,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             
             counter_next <=             counter;
@@ -175,8 +176,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             
             counter_next <=             "000";
@@ -205,8 +206,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             
             counter_next <=             counter;
@@ -235,8 +236,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             
             counter_next <=             counter;
@@ -265,8 +266,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               '0';
             
@@ -304,8 +305,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               checkedAll_next;
             
@@ -349,8 +350,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               checkedAll_next;
             
@@ -381,8 +382,8 @@ begin
             tempX <=                    i_data;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               checkedAll_next;
             
@@ -413,8 +414,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    tempY_next;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               checkedAll_next;
             
@@ -445,8 +446,8 @@ begin
             tempX <=                    tempX_next;
             tempY <=                    i_data;
             distMin <=                  distMin_next;
-            distTempX <=                "111111111";
-            distTempY <=                "111111111";
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               checkedAll_next;
             
@@ -496,8 +497,13 @@ begin
             --Calcolo distTempTot
             distTempTot <=              distTempX + distTempY;
             
+            --Aggiorno maschera e distanza minima in base alla distanza appena calcolata
             if(distTempTot = distMin) then
+                mask(to_integer(unsigned(counter))) <= '1';
             elsif(distTempTot < distMin) then
+                mask <=                 "00000000";
+                mask(to_integer(unsigned(counter))) <= '1';
+                distMin_next <=          distTempTot;
             else
             end if;
             
@@ -508,7 +514,7 @@ begin
                 checkedAll_next <=      checkedAll;
             end if;
             
-            counter_next <=             counter;
+            counter_next <=             counter + "001";
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
             pivotY_next <=              pivotY;             -- Fixed
@@ -546,10 +552,10 @@ begin
             NS <=                       FINE;
             
             --o_address <=                address_counter;
+            o_data <=                   mask;
             o_done <=                   '1';
             o_en <=                     '0';
             o_we <=                     '0';
-            o_data <=                   "00000000";
             
 -- #############################################################################################################################################
         
