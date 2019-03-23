@@ -60,10 +60,10 @@ signal distMin, distMin_next:                       std_logic_vector(8 downto 0)
 
 begin
 
-PS <= RST;
-NS <= RST;
+--PS <= RST;
+--NS <= RST;
 
-deltaLambda: process(PS) --deve determinare stato prossimo e uscita
+deltaLambda: process(PS, i_data, i_start, i_rst) --deve determinare stato prossimo e uscita
 begin
 
     case PS is
@@ -318,7 +318,7 @@ state: process(i_clk, i_rst)   -- setta i valori next
 begin
     if(i_rst = '1') then
         PS <= RST;
-    elsif(i_clk'event and i_clk = '1') then
+    elsif(i_rst = '0' and i_clk'event and i_clk = '1') then
         PS <= NS;
     end if;
 
