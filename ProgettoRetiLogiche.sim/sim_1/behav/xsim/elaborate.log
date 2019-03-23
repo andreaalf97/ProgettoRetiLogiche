@@ -1,0 +1,9 @@
+Vivado Simulator 2018.3
+Copyright 1986-1999, 2001-2018 Xilinx, Inc. All Rights Reserved.
+Running: /home/andreaalf/Xilinx/Vivado/2018.3/bin/unwrapped/lnx64.o/xelab -wto 455f3c1c824e441c8c71fbad0218b40b --incr --debug typical --relax --mt 8 -L xil_defaultlib -L secureip --snapshot project_tb_behav xil_defaultlib.project_tb -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+ERROR: [XSIM 43-3249] File /home/andreaalf/VivadoProjects/ProgettoRetiLogiche/ProgettoRetiLogiche.srcs/sources_1/new/project_reti_logiche.vhd, line 52. Unresolved signal "ps" is multiply driven.
