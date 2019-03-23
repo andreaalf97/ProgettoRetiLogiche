@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="project_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="project_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="92702170fs"></ZoomEndTime>
+      <Cursor1Time time="1000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="200"></NameColumnWidth>
+      <ValueColumnWidth column_width="108"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="18" />
+   <wvobject type="logic" fp_name="/project_tb/UUT/i_clk">
+      <obj_property name="ElementShortName">i_clk</obj_property>
+      <obj_property name="ObjectShortName">i_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/project_tb/UUT/i_start">
+      <obj_property name="ElementShortName">i_start</obj_property>
+      <obj_property name="ObjectShortName">i_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/project_tb/UUT/i_rst">
+      <obj_property name="ElementShortName">i_rst</obj_property>
+      <obj_property name="ObjectShortName">i_rst</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/i_data">
+      <obj_property name="ElementShortName">i_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">i_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/o_address">
+      <obj_property name="ElementShortName">o_address[15:0]</obj_property>
+      <obj_property name="ObjectShortName">o_address[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/project_tb/UUT/o_done">
+      <obj_property name="ElementShortName">o_done</obj_property>
+      <obj_property name="ObjectShortName">o_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/project_tb/UUT/o_en">
+      <obj_property name="ElementShortName">o_en</obj_property>
+      <obj_property name="ObjectShortName">o_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/project_tb/UUT/o_we">
+      <obj_property name="ElementShortName">o_we</obj_property>
+      <obj_property name="ObjectShortName">o_we</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/o_data">
+      <obj_property name="ElementShortName">o_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">o_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/project_tb/UUT/PS">
+      <obj_property name="ElementShortName">PS</obj_property>
+      <obj_property name="ObjectShortName">PS</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/project_tb/UUT/NS">
+      <obj_property name="ElementShortName">NS</obj_property>
+      <obj_property name="ObjectShortName">NS</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/mask">
+      <obj_property name="ElementShortName">mask[7:0]</obj_property>
+      <obj_property name="ObjectShortName">mask[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/pivotX">
+      <obj_property name="ElementShortName">pivotX[7:0]</obj_property>
+      <obj_property name="ObjectShortName">pivotX[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/pivotY">
+      <obj_property name="ElementShortName">pivotY[7:0]</obj_property>
+      <obj_property name="ObjectShortName">pivotY[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/tempX">
+      <obj_property name="ElementShortName">tempX[7:0]</obj_property>
+      <obj_property name="ObjectShortName">tempX[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/tempY">
+      <obj_property name="ElementShortName">tempY[7:0]</obj_property>
+      <obj_property name="ObjectShortName">tempY[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/distMin">
+      <obj_property name="ElementShortName">distMin[8:0]</obj_property>
+      <obj_property name="ObjectShortName">distMin[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/counter">
+      <obj_property name="ElementShortName">counter[2:0]</obj_property>
+      <obj_property name="ObjectShortName">counter[2:0]</obj_property>
+   </wvobject>
+</wave_config>
