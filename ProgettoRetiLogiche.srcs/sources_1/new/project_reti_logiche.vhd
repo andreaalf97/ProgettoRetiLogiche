@@ -49,7 +49,7 @@ end project_reti_logiche;
 
 architecture Behavioral of project_reti_logiche is
 
-type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Processor, AskCx, ReadCx, AskCy, ReadCy, UpdateOut, FINE);
+type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Processor, AskCx, ReadCx, AskCy, ReadCy, UpdateOut, FINEwrite, FINE);
 signal PS, NS :                                     STATUS;
 signal counter, counter_next:                       std_logic_vector(2 downto 0);
 signal mask, mask_next:                             std_logic_vector(7 downto 0);
@@ -60,7 +60,7 @@ signal distTempX, distTempY:                        std_logic_vector(7 downto 0)
 signal distTempTot:                                 std_logic_vector(8 downto 0);
 
 signal distMin, distMin_next:                       std_logic_vector(8 downto 0);
-signal checkedAll, checkedAll_next:                  std_logic;
+signal checkedAll, checkedAll_next:                 std_logic;
 
 
 begin
@@ -169,7 +169,7 @@ begin
 -- #############################################################################################################################################
             
         when AskPx =>   -- chiedo alla memoria il valore del pivot
-            counter <=                  "000";
+            counter <=                  counter_next;
             mask <=                     mask_next;
             pivotX <=                   pivotX_next;
             pivotY <=                   pivotY_next;
@@ -180,7 +180,7 @@ begin
             distTempY <=                "11111111";
             distTempTot <=              "111111111";
             
-            counter_next <=             "000";
+            counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;
             pivotY_next <=              pivotY;
@@ -309,19 +309,11 @@ begin
             distTempY <=                "11111111";
             distTempTot <=              "111111111";
             checkedAll <=               checkedAll_next;
+           
             
-            -- counter_next <=             counter;
-            mask_next <=                mask;               -- Fixed
-            pivotX_next <=              pivotX;             -- Fixed
-            pivotY_next <=              pivotY;             -- Fixed
-            tempX_next <=               tempX;
-            tempY_next <=               tempY;
-            distMin_next <=             distMin;
-            checkedAll_next <=          checkedAll;
-            
-            if(checkedAll = '1') then    --cioè se o controllato tutti gli stati
-                NS <=                   FINE;
+            if(checkedAll = '1') then    --cioè se ho controllato tutti gli stati
                 counter_next <=         counter;
+                NS <=                   FINEwrite;
             else
                 if(mask(to_integer(unsigned(counter))) = '0') then  --se il valore corrispondente della maschera è 0 rimango in questo stato e aggiorno il contatore
                     counter_next <=     counter + "001";
@@ -332,13 +324,21 @@ begin
                 end if;
             end if;
             
+            -- counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
+            
             --NS <=                       FINE;
             
             --o_address <=                address_counter;
             o_done <=                   '0';
             o_en <=                     '0';
             o_we <=                     '0';
-            o_data <=                   "00000000";
             
 -- #############################################################################################################################################
         
@@ -370,7 +370,6 @@ begin
             o_done <=                   '0';
             o_en <=                     '1';
             o_we <=                     '0';
-            o_data <=                   "00000000";
             
 -- #############################################################################################################################################
             
@@ -402,7 +401,6 @@ begin
             o_done <=                   '0';
             o_en <=                     '0';
             o_we <=                     '0';
-            o_data <=                   "00000000";
             
 -- #############################################################################################################################################
             
@@ -434,7 +432,6 @@ begin
             o_done <=                   '0';
             o_en <=                     '1';
             o_we <=                     '0';
-            o_data <=                   "00000000";
             
 -- #############################################################################################################################################
             
@@ -466,7 +463,6 @@ begin
             o_done <=                   '0';
             o_en <=                     '0';
             o_we <=                     '0';
-            o_data <=                   "00000000";
             
 -- #############################################################################################################################################
             
@@ -495,16 +491,18 @@ begin
             end if;
             
             --Calcolo distTempTot
-            distTempTot <=              ('0' & distTempX) + ('0' & distTempY);
+            distTempTot <=              ("0" & distTempX) + ("0" & distTempY);
             
             --Aggiorno maschera e distanza minima in base alla distanza appena calcolata
             if(distTempTot = distMin) then
-                mask(to_integer(unsigned(counter))) <= '1';
+                o_data(to_integer(unsigned(counter))) <= '1';
+                distMin_next <=         distMin;
             elsif(distTempTot < distMin) then
-                mask <=                 "00000000";
-                mask(to_integer(unsigned(counter))) <= '1';
+                o_data <=               "00000000";
+                o_data(to_integer(unsigned(counter))) <= '1';
                 distMin_next <=          distTempTot;
             else
+                distMin_next <=         distMin;
             end if;
             
             
@@ -519,8 +517,7 @@ begin
             pivotX_next <=              pivotX;             -- Fixed
             pivotY_next <=              pivotY;             -- Fixed
             tempX_next <=               tempX;
-            tempY_next <=               tempX;
-            distMin_next <=             distMin;
+            tempY_next <=               tempY;
             
             NS <=                       Processor;
             
@@ -528,10 +525,35 @@ begin
             o_done <=                   '0';
             o_en <=                     '0';
             o_we <=                     '0';
-            o_data <=                   "00000000";
                     
 -- #############################################################################################################################################
         
+        when FINEwrite =>
+            counter <=                  counter_next;
+            mask <=                     mask_next;
+            pivotX <=                   pivotX_next;
+            pivotY <=                   pivotY_next;
+            tempX <=                    tempX_next;
+            tempY <=                    tempY_next;
+            distMin <=                  distMin_next;
+            
+            counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            distMin_next <=             distMin;
+            
+            NS <=                       FINE;
+            
+            o_address <=                "0000000000010001";
+            o_done <=                   '0';
+            o_en <=                     '1';
+            o_we <=                     '1';
+            
+-- #############################################################################################################################################
+
         when FINE =>
             counter <=                  counter_next;
             mask <=                     mask_next;
@@ -551,13 +573,10 @@ begin
             
             NS <=                       FINE;
             
-            --o_address <=                address_counter;
-            o_data <=                   mask;
+            o_address <=                "1111111111111111";
             o_done <=                   '1';
             o_en <=                     '0';
             o_we <=                     '0';
-            
--- #############################################################################################################################################
         
         when others =>
             NS <=                       RST;

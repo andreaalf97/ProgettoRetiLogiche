@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="2000000001fs"></ZoomEndTime>
-      <Cursor1Time time="2000000000fs"></Cursor1Time>
+      <ZoomStartTime time="1068420000fs"></ZoomStartTime>
+      <ZoomEndTime time="1162420001fs"></ZoomEndTime>
+      <Cursor1Time time="3000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="200"></NameColumnWidth>
-      <ValueColumnWidth column_width="100"></ValueColumnWidth>
+      <ValueColumnWidth column_width="96"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="22" />
    <wvobject type="logic" fp_name="/project_tb/UUT/i_clk">
       <obj_property name="ElementShortName">i_clk</obj_property>
       <obj_property name="ObjectShortName">i_clk</obj_property>
@@ -59,10 +59,6 @@
       <obj_property name="ElementShortName">PS</obj_property>
       <obj_property name="ObjectShortName">PS</obj_property>
    </wvobject>
-   <wvobject type="other" fp_name="/project_tb/UUT/NS">
-      <obj_property name="ElementShortName">NS</obj_property>
-      <obj_property name="ObjectShortName">NS</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/mask">
       <obj_property name="ElementShortName">mask[7:0]</obj_property>
       <obj_property name="ObjectShortName">mask[7:0]</obj_property>
@@ -83,12 +79,32 @@
       <obj_property name="ElementShortName">tempY[7:0]</obj_property>
       <obj_property name="ObjectShortName">tempY[7:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/distTempX">
+      <obj_property name="ElementShortName">distTempX[7:0]</obj_property>
+      <obj_property name="ObjectShortName">distTempX[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/distTempY">
+      <obj_property name="ElementShortName">distTempY[7:0]</obj_property>
+      <obj_property name="ObjectShortName">distTempY[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/distTempTot">
+      <obj_property name="ElementShortName">distTempTot[8:0]</obj_property>
+      <obj_property name="ObjectShortName">distTempTot[8:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/distMin">
       <obj_property name="ElementShortName">distMin[8:0]</obj_property>
       <obj_property name="ObjectShortName">distMin[8:0]</obj_property>
    </wvobject>
+   <wvobject type="logic" fp_name="/project_tb/UUT/checkedAll">
+      <obj_property name="ElementShortName">checkedAll</obj_property>
+      <obj_property name="ObjectShortName">checkedAll</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/counter">
       <obj_property name="ElementShortName">counter[2:0]</obj_property>
       <obj_property name="ObjectShortName">counter[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/project_tb/UUT/counter_next">
+      <obj_property name="ElementShortName">counter_next[2:0]</obj_property>
+      <obj_property name="ObjectShortName">counter_next[2:0]</obj_property>
    </wvobject>
 </wave_config>
