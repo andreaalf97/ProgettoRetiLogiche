@@ -56,8 +56,8 @@ signal mask, mask_next:                             std_logic_vector(7 downto 0)
 signal pivotX, pivotX_next, pivotY, pivotY_next:    std_logic_vector(7 downto 0);
 
 signal tempX, tempY, tempX_next, tempY_next:        std_logic_vector(7 downto 0);
-signal distTempX, distTempY:                        std_logic_vector(7 downto 0);
-signal distTempTot:                                 std_logic_vector(8 downto 0);
+--signal distTempX, distTempY:                        std_logic_vector(7 downto 0);
+--signal distTempTot:                                 std_logic_vector(8 downto 0);
 
 signal distMin, distMin_next:                       std_logic_vector(8 downto 0);
 signal checkedAll, checkedAll_next:                 std_logic;
@@ -66,6 +66,10 @@ signal checkedAll, checkedAll_next:                 std_logic;
 begin
 
 deltaLambda: process(PS, i_data, i_start, i_rst, counter, mask, pivotX, pivotY, tempX, tempY, distMin, checkedAll) --deve determinare stato prossimo e uscita
+
+variable distTempX, distTempY : std_logic_vector(7 downto 0);
+variable distTempTot :          std_logic_vector(8 downto 0);
+
 begin
 
     case PS is
@@ -342,9 +346,9 @@ begin
             distMin_next <=             distMin;
             checkedAll_next <=          checkedAll;
             
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
+            distTempX :=                "11111111";
+            distTempY :=                "11111111";
+            distTempTot :=              "111111111";
             
             NS <=                       UpdateOut;
             
@@ -357,21 +361,24 @@ begin
             
         when UpdateOut =>
             --Calcolo distTempX
+            
+            --distTempX <=                std_logic_vector(abs(signed(tempX) - signed(pivotX)));
+            
             if(pivotX < tempX) then
-                distTempX <=            tempX - pivotX;
+                distTempX :=            tempX - pivotX;
             else
-                distTempX <=            pivotX - tempX;
+                distTempX :=            pivotX - tempX;
             end if;
             
             --Calcolo distTempY
             if(pivotY < tempY) then
-                distTempY <=            tempY - pivotY;
+                distTempY :=            tempY - pivotY;
             else
-                distTempY <=            pivotY - tempY;
+                distTempY :=            pivotY - tempY;
             end if;
             
             --Calcolo distTempTot
-            distTempTot <=              ("0" & distTempX) + ("0" & distTempY);
+            distTempTot :=              ("0" & distTempX) + ("0" & distTempY);
             
             --Aggiorno maschera e distanza minima in base alla distanza appena calcolata
             if(distTempTot = distMin) then
@@ -463,9 +470,6 @@ begin
         tempX <=                    "00000000";
         tempY <=                    "00000000";
         distMin <=                  "111111111";
-        distTempX <=                "11111111";
-        distTempY <=                "11111111";
-        distTempTot <=              "111111111";
         checkedAll <=               '0';
     elsif(i_rst = '0' and i_clk'event and i_clk = '1') then
         counter <=                  counter_next;
