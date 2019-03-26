@@ -426,7 +426,7 @@ begin
             
             NS <=                       FINE;
             
-            o_address <=                "0000000000010001";
+            o_address <=                "0000000000010011";
             o_done <=                   '0';
             o_en <=                     '1';
             o_we <=                     '1';
@@ -444,10 +444,19 @@ begin
             
             NS <=                       FINE;
             
-            o_address <=                "1111111111111111";
-            o_done <=                   '1';
-            o_en <=                     '0';
-            o_we <=                     '0';
+            --o_address <=                "1111111111111111";
+            if(i_start = '0') then
+                o_done <=                   '0';
+                NS <=                       RST;
+            else
+                o_done <=                   '1';
+                NS <=                       FINE;
+            end if;
+            
+            --o_en <=                     '0';
+            --o_we <=                     '0';
+            
+        
         
         when others =>
             NS <=                       RST;

@@ -20,7 +20,7 @@ signal   mem_we		        	: std_logic;
 type ram_type is array (65535 downto 0) of std_logic_vector(7 downto 0);
 
 -- come da esempio su specifica
-signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 185 , 8)),
+signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 511 , 8)),
                          1 => std_logic_vector(to_unsigned( 75 , 8)),
                          2 => std_logic_vector(to_unsigned( 32 , 8)),
                          3 => std_logic_vector(to_unsigned( 111 , 8)),
@@ -35,8 +35,8 @@ signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 185 , 8)),
                          12 => std_logic_vector(to_unsigned( 254 , 8)),
                          13 => std_logic_vector(to_unsigned( 215 , 8)),
                          14 => std_logic_vector(to_unsigned( 78 , 8)),
-                         15 => std_logic_vector(to_unsigned( 211 , 8)),
-                         16 => std_logic_vector(to_unsigned( 121 , 8)),
+                         15 => std_logic_vector(to_unsigned( 78 , 8)),
+                         16 => std_logic_vector(to_unsigned( 33 , 8)),
                          17 => std_logic_vector(to_unsigned( 78 , 8)),
                          18 => std_logic_vector(to_unsigned( 33 , 8)),
 			 others => (others =>'0'));
@@ -108,7 +108,7 @@ begin
     wait until tb_done = '0';
 
     -- Maschera di output = 00010001
-    assert RAM(19) = std_logic_vector(to_unsigned( 17 , 8)) report "TEST FALLITO" severity failure;
+    assert RAM(19) = std_logic_vector(to_unsigned( 128 , 8)) report "TEST FALLITO" severity failure;
  
     assert false report "Simulation Ended!, TEST PASSATO" severity failure;
 end process test;
