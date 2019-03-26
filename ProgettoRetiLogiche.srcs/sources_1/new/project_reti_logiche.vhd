@@ -49,7 +49,7 @@ end project_reti_logiche;
 
 architecture Behavioral of project_reti_logiche is
 
-type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Processor, AskCx, ReadCx, AskCy, ReadCy, UpdateOut, FINEwrite, FINE);
+type STATUS is (RST, AskMask, ReadMask, AskPx, ReadPx, AskPy, ReadPy, Processor, AskCx, ReadCx, AskCy, ReadCy,LetEmStabilize, UpdateOut, FINEwrite, FINE);
 signal PS, NS :                                     STATUS;
 signal counter, counter_next:                       std_logic_vector(2 downto 0);
 signal mask, mask_next:                             std_logic_vector(7 downto 0);
@@ -65,7 +65,7 @@ signal checkedAll, checkedAll_next:                 std_logic;
 
 begin
 
-deltaLambda: process(PS, i_data, i_start, i_rst) --deve determinare stato prossimo e uscita
+deltaLambda: process(PS, i_data, i_start, i_rst, counter, mask, pivotX, pivotY, tempX, tempY, distMin, checkedAll) --deve determinare stato prossimo e uscita
 begin
 
     case PS is
@@ -73,18 +73,6 @@ begin
 -- #############################################################################################################################################
 
         when RST => --inizializzo tutti i valori dei signal            
-            counter <=                  "000";
-            mask <=                     "00000000";
-            pivotX <=                   "00000000";
-            pivotY <=                   "00000000";
-            tempX <=                    "00000000";
-            tempY <=                    "00000000";
-            distMin <=                  "111111111";
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            checkedAll <=               '0';
-            
             counter_next <=             "000";
             mask_next <=                "00000000";
             pivotX_next <=              "00000000";
@@ -109,17 +97,6 @@ begin
 -- #############################################################################################################################################
             
         when AskMask => --richiedo la maschera all'indirizzo 0 alla memoria            
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            
             counter_next <=             counter;
             mask_next <=                mask;
             pivotX_next <=              pivotX;
@@ -127,6 +104,7 @@ begin
             tempX_next <=               tempX;
             tempY_next <=               tempY;
             distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
             
             NS <=                       ReadMask;
             
@@ -139,19 +117,9 @@ begin
 -- #############################################################################################################################################
             
         when ReadMask => -- leggo la maschera all'indirizzo 0 alla memoria            
-            counter <=                  counter_next;
-            mask <=                     i_data;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            
             counter_next <=             counter;
             mask_next <=                i_data; -- Fixed from now on
+            mask <=                     i_data;
             pivotX_next <=              pivotX;
             pivotY_next <=              pivotY;
             tempX_next <=               tempX;
@@ -169,17 +137,6 @@ begin
 -- #############################################################################################################################################
             
         when AskPx =>   -- chiedo alla memoria il valore del pivot
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;
@@ -199,20 +156,10 @@ begin
 -- #############################################################################################################################################
             
         when ReadPx =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   i_data;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              i_data;
+            pivotX <=                   i_data;
             pivotY_next <=              pivotY;
             tempX_next <=               tempX;
             tempY_next <=               tempY;
@@ -229,17 +176,6 @@ begin
 -- #############################################################################################################################################
             
         when AskPy =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
@@ -259,22 +195,11 @@ begin
 -- #############################################################################################################################################
         
         when ReadPy =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   i_data;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            checkedAll <=               '0';
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
             pivotY_next <=              i_data;             -- Fixed
+            pivotY <=                   i_data;
             tempX_next <=               tempX;
             tempY_next <=               tempY;
             distMin_next <=             distMin;
@@ -298,19 +223,6 @@ begin
         --      tempX, tempY =    X e Y dei centroidi che vado a confrontare
         --      distMin =         distanza minima in ogni momento
         
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            checkedAll <=               checkedAll_next;
-           
-            
             if(checkedAll = '1') then    --cioè se ho controllato tutti gli stati
                 counter_next <=         counter;
                 NS <=                   FINEwrite;
@@ -343,18 +255,6 @@ begin
 -- #############################################################################################################################################
         
         when AskCx =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            checkedAll <=               checkedAll_next;
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
@@ -374,23 +274,12 @@ begin
 -- #############################################################################################################################################
             
         when ReadCx =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    i_data;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            checkedAll <=               checkedAll_next;
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
             pivotY_next <=              pivotY;             -- Fixed
             tempX_next <=               i_data;
+            tempX <=                    i_data;
             tempY_next <=               tempY;
             distMin_next <=             distMin;
             checkedAll_next <=          checkedAll;
@@ -405,18 +294,6 @@ begin
 -- #############################################################################################################################################
             
         when AskCy =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            checkedAll <=               checkedAll_next;
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
@@ -436,28 +313,17 @@ begin
 -- #############################################################################################################################################
             
         when ReadCy =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    i_data;
-            distMin <=                  distMin_next;
-            distTempX <=                "11111111";
-            distTempY <=                "11111111";
-            distTempTot <=              "111111111";
-            checkedAll <=               checkedAll_next;
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
             pivotY_next <=              pivotY;             -- Fixed
             tempX_next <=               tempX;
             tempY_next <=               i_data;
+            tempY <=                    i_data;
             distMin_next <=             distMin;
             checkedAll_next <=          checkedAll;
             
-            NS <=                       UpdateOut;
+            NS <=                       LetEmStabilize;
             
             --o_address <=                (("0000000000000" & (counter + "001")) + ("0000000000000" & (counter + "001")));
             o_done <=                   '0';
@@ -465,17 +331,31 @@ begin
             o_we <=                     '0';
             
 -- #############################################################################################################################################
+
+        when LetEmStabilize =>
+            counter_next <=             counter;
+            mask_next <=                mask;               -- Fixed
+            pivotX_next <=              pivotX;             -- Fixed
+            pivotY_next <=              pivotY;             -- Fixed
+            tempX_next <=               tempX;
+            tempY_next <=               tempY;
+            distMin_next <=             distMin;
+            checkedAll_next <=          checkedAll;
+            
+            distTempX <=                "11111111";
+            distTempY <=                "11111111";
+            distTempTot <=              "111111111";
+            
+            NS <=                       UpdateOut;
+            
+            --o_address <=                (("0000000000000" & (counter + "001")) + ("0000000000000" & (counter + "001")));
+            o_done <=                   '0';
+            o_en <=                     '0';
+            o_we <=                     '0';
+
+-- #############################################################################################################################################
             
         when UpdateOut =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            checkedAll <=               checkedAll_next;
-
             --Calcolo distTempX
             if(pivotX < tempX) then
                 distTempX <=            tempX - pivotX;
@@ -529,14 +409,6 @@ begin
 -- #############################################################################################################################################
         
         when FINEwrite =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
@@ -555,14 +427,6 @@ begin
 -- #############################################################################################################################################
 
         when FINE =>
-            counter <=                  counter_next;
-            mask <=                     mask_next;
-            pivotX <=                   pivotX_next;
-            pivotY <=                   pivotY_next;
-            tempX <=                    tempX_next;
-            tempY <=                    tempY_next;
-            distMin <=                  distMin_next;
-            
             counter_next <=             counter;
             mask_next <=                mask;               -- Fixed
             pivotX_next <=              pivotX;             -- Fixed
@@ -592,8 +456,27 @@ state: process(i_clk, i_rst)   -- setta i valori next
 begin
     if(i_rst = '1') then
         PS <= RST;
+        counter <=                  "000";
+        mask <=                     "00000000";
+        pivotX <=                   "00000000";
+        pivotY <=                   "00000000";
+        tempX <=                    "00000000";
+        tempY <=                    "00000000";
+        distMin <=                  "111111111";
+        distTempX <=                "11111111";
+        distTempY <=                "11111111";
+        distTempTot <=              "111111111";
+        checkedAll <=               '0';
     elsif(i_rst = '0' and i_clk'event and i_clk = '1') then
-        PS <= NS;
+        counter <=                  counter_next;
+        pivotX <=                   pivotX_next;
+        pivotY <=                   pivotY_next;
+        tempX <=                    tempX_next;
+        tempY <=                    tempY_next;
+        distMin <=                  distMin_next;
+        mask <=                     mask_next;
+        checkedAll <=               checkedAll_next;
+        PS <=                       NS;
     end if;
 
 end process;
