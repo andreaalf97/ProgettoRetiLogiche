@@ -10,13 +10,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="4505333334fs"></ZoomStartTime>
-      <ZoomEndTime time="4701333335fs"></ZoomEndTime>
+      <ZoomStartTime time="3185341765fs"></ZoomStartTime>
+      <ZoomEndTime time="5542931647fs"></ZoomEndTime>
       <Cursor1Time time="4850000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="200"></NameColumnWidth>
-      <ValueColumnWidth column_width="88"></ValueColumnWidth>
+      <ValueColumnWidth column_width="80"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="18" />
    <wvobject type="logic" fp_name="/project_tb/UUT/i_clk">
@@ -34,10 +34,12 @@
    <wvobject type="array" fp_name="/project_tb/UUT/i_data">
       <obj_property name="ElementShortName">i_data[7:0]</obj_property>
       <obj_property name="ObjectShortName">i_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/o_address">
       <obj_property name="ElementShortName">o_address[15:0]</obj_property>
       <obj_property name="ObjectShortName">o_address[15:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/project_tb/UUT/o_done">
       <obj_property name="ElementShortName">o_done</obj_property>
@@ -54,6 +56,7 @@
    <wvobject type="array" fp_name="/project_tb/UUT/o_data">
       <obj_property name="ElementShortName">o_data[7:0]</obj_property>
       <obj_property name="ObjectShortName">o_data[7:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
    <wvobject type="other" fp_name="/project_tb/UUT/PS">
       <obj_property name="ElementShortName">PS</obj_property>
@@ -66,26 +69,32 @@
    <wvobject type="array" fp_name="/project_tb/UUT/mask">
       <obj_property name="ElementShortName">mask[7:0]</obj_property>
       <obj_property name="ObjectShortName">mask[7:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/pivotX">
       <obj_property name="ElementShortName">pivotX[7:0]</obj_property>
       <obj_property name="ObjectShortName">pivotX[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/pivotY">
       <obj_property name="ElementShortName">pivotY[7:0]</obj_property>
       <obj_property name="ObjectShortName">pivotY[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/tempX">
       <obj_property name="ElementShortName">tempX[7:0]</obj_property>
       <obj_property name="ObjectShortName">tempX[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/tempY">
       <obj_property name="ElementShortName">tempY[7:0]</obj_property>
       <obj_property name="ObjectShortName">tempY[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/project_tb/UUT/distMin">
       <obj_property name="ElementShortName">distMin[8:0]</obj_property>
       <obj_property name="ObjectShortName">distMin[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/project_tb/UUT/checkedAll">
       <obj_property name="ElementShortName">checkedAll</obj_property>

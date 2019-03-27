@@ -270,7 +270,13 @@ begin
             
             NS <=                       ReadCx;
             
-            o_address <=                ("0000000000000" & (counter + "001")) + ("0000000000000" & counter);
+            
+            if(counter = "111") then
+                o_address <=                ("000000000000" & ("1000")) + ("0000000000000" & counter);
+            else
+                o_address <=                ("0000000000000" & (counter + "001")) + ("0000000000000" & counter);
+
+            end if;
             o_done <=                   '0';
             o_en <=                     '1';
             o_we <=                     '0';
@@ -309,7 +315,11 @@ begin
             
             NS <=                       ReadCy;
             
-            o_address <=                (("0000000000000" & (counter + "001")) + ("0000000000000" & (counter + "001")));
+            if(counter = "111") then
+                o_address <=                (("000000000000" & ("1000")) + ("000000000000" & ("1000")));
+            else
+                o_address <=                (("0000000000000" & (counter + "001")) + ("0000000000000" & (counter + "001")));
+            end if;
             o_done <=                   '0';
             o_en <=                     '1';
             o_we <=                     '0';
@@ -441,8 +451,6 @@ begin
             tempX_next <=               tempX;
             tempY_next <=               tempY;
             distMin_next <=             distMin;
-            
-            NS <=                       FINE;
             
             --o_address <=                "1111111111111111";
             if(i_start = '0') then
