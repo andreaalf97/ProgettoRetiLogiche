@@ -232,8 +232,13 @@ begin
                 NS <=                   FINEwrite;
             else
                 if(mask(to_integer(unsigned(counter))) = '0') then  --se il valore corrispondente della maschera è 0 rimango in questo stato e aggiorno il contatore
-                    counter_next <=     counter + "001";
-                    NS <=               Processor;
+                    if(counter = "111") then
+                        counter_next <=     counter;
+                        NS <=               FINEwrite;
+                    else
+                        counter_next <=     counter + "001";
+                        NS <=               Processor;
+                    end if;
                 else            -- se la maschera è a 1 passo allo stato di richiesta X
                     counter_next <=     counter;
                     NS <=               AskCx;
