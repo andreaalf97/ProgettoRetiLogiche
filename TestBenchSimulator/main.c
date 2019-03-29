@@ -12,7 +12,7 @@ int powerOfTwo(int);
 
 int main(int argc, char *argv[]){
   FILE *fp, *defFile;
-  bool mask[8];
+  bool mask[8] = {1, 1, 1, 1, 1, 1, 1, 0};
   int maskInt;
   bool uscita[8];
   int uscitaInt;
@@ -31,8 +31,8 @@ int main(int argc, char *argv[]){
   distMin = 512;
 
   if(fp = fopen("tb1.vhd", "w")){
-    for(i = 0; i < 8; i++)
-      mask[i] = random() % 2;
+    /*for(i = 0; i < 8; i++)
+      mask[i] = random() % 2;*/
 
     pivotX = random() % 256;
     pivotY = random() % 256;
