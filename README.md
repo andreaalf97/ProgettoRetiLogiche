@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Il report del progetto si trova qui --> "/abstract.pdf"
+Il report del progetto si trova qui --> "/Report.pdf"
 
 ## Consegna
 
